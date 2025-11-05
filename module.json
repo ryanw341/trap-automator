@@ -1,0 +1,29 @@
+{
+  "id": "trap-automator",
+  "title": "Trap Automator",
+  "url":"https://github.com/ryanw341/trap-automator.git",
+  "manifest": "https://raw.githubusercontent.com/ryanw341/trap-automator/main/module.json",
+  "download": "https://github.com/ryanw341/trap-automator/releases/download/v0.1.43/trap-automator.zip",
+  "description": "Adds a configurable interface for building traps and caches with stealthy hint tokens. A hot-key opens a menu to select the trap or cache type, location, trigger and difficulty before drawing a tile. When the tile is drawn the module automatically attaches the appropriate macro JSON to the tile and spawns hint tokens around it. The hints are generic enough to be re-used and randomised, and the module can be extended by adding additional trap or cache definitions.",
+  "version": "0.1.43",
+  "authors": [
+    { "name": "Trap Automator" }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "11"
+  },
+  "esmodules": [
+    "scripts/trap-automator.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "relationships": {
+    "requires": []
+  }
+}
