@@ -2,13 +2,15 @@
   "id": "trap-automator",
   "title": "Trap Automator",
   "description": "Adds a configurable interface for building traps and caches with stealthy hint tokens. A hot-key opens a menu to select the trap or cache type, location, trigger and difficulty before drawing a tile. When the tile is drawn the module automatically attaches the appropriate macro JSON to the tile and spawns hint tokens around it. The hints are generic enough to be re-used and randomised, and the module can be extended by adding additional trap or cache definitions.",
-  "version": "0.2.0",
+  "version": "1.0.0",
+  "manifest": "https://raw.githubusercontent.com/ryanw341/trap-automator/main/module.json",
+  "download": "https://github.com/ryanw341/trap-automator/releases/download/v1.0.0-alpha/trap-automator-1.0.0-alpha.zip",
   "authors": [
-    { "name": "Trap Automator" }
+    { "name": "The Horse" }
   ],
   "compatibility": {
-    "minimum": "11",
-    "verified": "11"
+    "minimum": "13",
+    "verified": "13"
   },
   "esmodules": [
     "scripts/trap-automator.js"
@@ -21,6 +23,17 @@
     }
   ],
   "relationships": {
-    "requires": []
+    "requires": [
+            {
+        "id": "monks-active-tile-triggers",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/ironmonk88/monks-active-tile-triggers/main/module.json"
+      },
+      {
+        "id": "stealthy",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/syl3r86/stealthy/main/module.json"
+      }
+    ]
   }
 }
