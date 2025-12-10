@@ -5,15 +5,15 @@
   "version": "1.0.0",
   "manifest": "https://raw.githubusercontent.com/ryanw341/trap-automator/main/module.json",
   "download": "https://github.com/ryanw341/trap-automator/releases/download/v1.0.0-alpha/trap-automator-1.0.0-alpha.zip",
-    "packs": [
-    {
-      "name": "actors",
-      "label": "The Horse's Actors",
-      "path": "packs/actors/actors.db",
-      "type": "Actor",
-      "system": "dnd5e"
-    }
-  ],
+"packs": [
+  {
+    "name": "the-horses-actors",
+    "label": "The Horse's Actors",
+    "path": "packs/actors/the-horses-actors",
+    "type": "Actor",
+    "system": "dnd5e"
+  }
+],
   "authors": [
     { "name": "The Horse" }
   ],
