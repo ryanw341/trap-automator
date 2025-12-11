@@ -36,7 +36,7 @@ class TrapAutomator {
    */
   registerKeybinding() {
     console.log('Trap Automator: registering keybinding');
-    game.keybindings.register('trap-automator', 'open-trap-menu', {
+    game.keybindings.register('the-horses-trap-automator', 'open-trap-menu', {
       name: 'Open Trap/Cache Automator',
       hint: 'Open the trap or cache creation menu.',
       editable: [
@@ -67,7 +67,7 @@ class TrapAutomator {
    * survive server restarts.
    */
   static registerSettings() {
-    game.settings.register('trap-automator', 'customDefs', {
+    game.settings.register('the-horses-trap-automator', 'customDefs', {
       name: 'Custom Trap Automator Definitions',
       scope: 'world',
       config: false,
@@ -79,7 +79,7 @@ class TrapAutomator {
     // traps or caches. When a GM selects a different macro via the
     // "Select Macro" menu this value will be updated. The default is
     // the provided macro id used in earlier versions of the module.
-    game.settings.register('trap-automator', 'macroId', {
+    game.settings.register('the-horses-trap-automator', 'macroId', {
       name: 'Trap Automator Macro ID',
       scope: 'world',
       config: false,
@@ -173,7 +173,7 @@ class TrapAutomator {
     }
     // Copy triggers for subcategories from their primary parent
     try {
-      const custom = game.settings.get('trap-automator', 'customDefs') || {};
+      const custom = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
       const cats = custom.categories || {};
       for (const [sub, info] of Object.entries(cats)) {
         if (!info || !info.primary) continue;
@@ -355,7 +355,7 @@ class TrapAutomator {
     }
     // Gather custom categories from settings
     try {
-      const custom = game.settings.get('trap-automator', 'customDefs') || {};
+      const custom = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
       if (custom.categories) {
         for (const key of Object.keys(custom.categories)) cats.add(key);
       }
@@ -378,7 +378,7 @@ class TrapAutomator {
     // Otherwise if the category exists in custom definitions but has no
     // primary specified, treat the category itself as a primary category.
     try {
-      const custom = game.settings.get('trap-automator', 'customDefs') || {};
+      const custom = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
       if (custom.categories && custom.categories[name]) {
         const info = custom.categories[name];
         if (info && info.primary) {
@@ -419,7 +419,7 @@ class TrapAutomator {
     }
     // Custom categories
     try {
-      const custom = game.settings.get('trap-automator', 'customDefs') || {};
+      const custom = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
       const cats = custom.categories || {};
       for (const [k, v] of Object.entries(cats)) {
         if (v.primary === primary) subs.add(k);
@@ -488,7 +488,7 @@ class TrapAutomator {
     }
     // Include custom category keys
     try {
-      const custom = game.settings.get('trap-automator', 'customDefs') || {};
+      const custom = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
       if (custom.categories) {
         for (const key of Object.keys(custom.categories)) cats.add(key);
       }
@@ -519,7 +519,7 @@ class TrapAutomator {
    * @param {Object} custom Updated custom definitions object
    */
   async saveCustomDefinitions(custom) {
-    await game.settings.set('trap-automator', 'customDefs', custom);
+    await game.settings.set('the-horses-trap-automator', 'customDefs', custom);
     // Merge into live definitions
     this.mergeDefinitions(custom);
   }
@@ -541,7 +541,7 @@ class TrapAutomator {
               ui.notifications.warn('Category ID cannot be empty.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.categories) custom.categories = {};
             if (custom.categories[cat]) {
               ui.notifications.warn('Category already exists in custom definitions.');
@@ -613,7 +613,7 @@ class TrapAutomator {
               ui.notifications.warn('Trigger text cannot be empty.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.triggers) custom.triggers = {};
             if (!custom.triggers[cat]) custom.triggers[cat] = [];
             custom.triggers[cat].push(trig);
@@ -705,7 +705,7 @@ class TrapAutomator {
               ui.notifications.warn('At least one hint set must be filled in.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.cache) custom.cache = {};
             const key = this.slugify(name);
             custom.cache[key] = {
@@ -877,7 +877,7 @@ class TrapAutomator {
               ui.notifications.warn('At least one complete hint set must be provided.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.trap) custom.trap = {};
             const key = this.slugify(name);
             custom.trap[key] = {
@@ -985,7 +985,7 @@ class TrapAutomator {
               return;
             }
             // Prevent duplicates by checking existing custom categories
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.categories) custom.categories = {};
             if (custom.categories[sub]) {
               ui.notifications.warn('Subcategory already exists in custom definitions.');
@@ -1025,7 +1025,7 @@ class TrapAutomator {
     }
     // Build options list sorted by name. Include both name and id for clarity.
     macroDocs = macroDocs.sort((a, b) => a.name.localeCompare(b.name));
-    const currentUuid = game.settings.get('trap-automator', 'macroId') || '';
+    const currentUuid = game.settings.get('the-horses-trap-automator', 'macroId') || '';
     const options = macroDocs.map(macro => {
       const uuid = macro.uuid ?? `Macro.${macro.id}`;
       const selected = uuid === currentUuid ? ' selected' : '';
@@ -1052,7 +1052,7 @@ class TrapAutomator {
               ui.notifications.warn('No macro selected.');
               return;
             }
-            await game.settings.set('trap-automator', 'macroId', uuid);
+            await game.settings.set('the-horses-trap-automator', 'macroId', uuid);
             ui.notifications.info('Trap Automator: macro updated. New traps will use the selected macro.');
           }
         },
@@ -1105,7 +1105,7 @@ class TrapAutomator {
               ui.notifications.warn('You must enter a new category name.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.categories) custom.categories = {};
             // Rename custom category or create override
             delete custom.categories[oldCat];
@@ -1119,7 +1119,7 @@ class TrapAutomator {
           callback: async html => {
             const catToDelete = html.find('#ta-edit-cat-sel').val();
             // Only allow deletion of custom categories
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.categories || !custom.categories[catToDelete]) {
               ui.notifications.warn('Only custom categories may be deleted.');
               return;
@@ -1191,7 +1191,7 @@ class TrapAutomator {
       }
     }
     try {
-      const custom = game.settings.get('trap-automator', 'customDefs') || {};
+      const custom = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
       if (custom.triggers) {
         for (const cat of Object.keys(custom.triggers)) {
           const { primary } = this.categorizeCategory(cat);
@@ -1256,7 +1256,7 @@ class TrapAutomator {
               return;
             }
             // Build custom object and replace the trigger
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.triggers) custom.triggers = {};
             // Remove old trigger if exists in custom for the category
             if (!custom.triggers[catVal]) custom.triggers[catVal] = [];
@@ -1278,7 +1278,7 @@ class TrapAutomator {
             const baseList = (this.definitions.triggers && this.definitions.triggers[catVal]) ? Array.from(this.definitions.triggers[catVal]) : [];
             // Merge in custom triggers
             try {
-              const custom = game.settings.get('trap-automator', 'customDefs') || {};
+              const custom = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
               if (custom.triggers && Array.isArray(custom.triggers[catVal])) {
                 for (const t of custom.triggers[catVal]) {
                   if (!baseList.includes(t)) baseList.push(t);
@@ -1297,7 +1297,7 @@ class TrapAutomator {
                 yes: {
                   label: 'Delete',
                   callback: async () => {
-                    const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+                    const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
                     if (!custom.triggers) custom.triggers = {};
                     // Build new list excluding the old trigger
                     const newList = baseList.filter(t => t !== oldTrig);
@@ -1534,7 +1534,7 @@ class TrapAutomator {
                 '+10': $el.find(`[name="hint-${i}-10"]`).val().trim()
               });
             });
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.cache) custom.cache = {};
             custom.cache[key] = {
               name: newName || key,
@@ -1555,7 +1555,7 @@ class TrapAutomator {
           label: 'Delete',
           callback: () => {
             // Only allow deletion of custom caches
-            const customDefs = game.settings.get('trap-automator', 'customDefs') || {};
+            const customDefs = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
             if (!customDefs.cache || !customDefs.cache[key]) {
               ui.notifications.warn('Only custom caches may be deleted.');
               return;
@@ -1782,7 +1782,7 @@ class TrapAutomator {
                 '+10': $el.find(`[name="hint-${i}-10"]`).val().trim()
               });
             });
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = duplicate(game.settings.get('the-horses-trap-automator', 'customDefs') || {});
             if (!custom.trap) custom.trap = {};
             custom.trap[key] = {
               name: newName || key,
@@ -1809,7 +1809,7 @@ class TrapAutomator {
           label: 'Delete',
           callback: () => {
             // Only allow deletion of custom traps
-            const customDefs = game.settings.get('trap-automator', 'customDefs') || {};
+            const customDefs = game.settings.get('the-horses-trap-automator', 'customDefs') || {};
             if (!customDefs.trap || !customDefs.trap[key]) {
               ui.notifications.warn('Only custom traps may be deleted.');
               return;
@@ -2296,7 +2296,7 @@ class TrapAutomator {
     // been selected, fall back to the default value. Wrap the JSON argument
     // in quotes to prevent splitting on spaces. Escape double quotes inside
     // the JSON.
-    const macroUuid = game.settings.get('trap-automator', 'macroId') || 'Macro.z9RXNw9fEKBIkxHW';
+    const macroUuid = game.settings.get('the-horses-trap-automator', 'macroId') || 'Macro.z9RXNw9fEKBIkxHW';
     const rawJson = JSON.stringify(trapData);
     const escaped = rawJson.replace(/"/g, '\\"');
     const argString = `"${escaped}"`;
@@ -2316,7 +2316,7 @@ class TrapAutomator {
     try {
       await tileDoc.update({
         flags: {
-          'trap-automator': { trapData },
+          'the-horses-trap-automator': { trapData },
           'monks-active-tiles': {
             trigger: 'enter',
             active: true,
@@ -2523,7 +2523,7 @@ Hooks.once('init', () => {
 Hooks.once('ready', async () => {
   console.log('Trap Automator: ready hook fired');
   try {
-    const resp = await fetch('modules/trap-automator/definitions/builtin-defs.json');
+    const resp = await fetch('modules/the-horses-trap-automator/definitions/builtin-defs.json');
     if (resp.ok) {
       const data = await resp.json();
       game.trapAutomator.mergeDefinitions(data);
@@ -2538,7 +2538,7 @@ Hooks.once('ready', async () => {
   }
   // Load any custom definitions stored in settings.
   try {
-    const custom = game.settings.get('trap-automator', 'customDefs');
+    const custom = game.settings.get('the-horses-trap-automator', 'customDefs');
     if (custom && Object.keys(custom).length) {
       game.trapAutomator.mergeDefinitions(custom);
       console.log('Trap Automator: loaded custom definitions');
