@@ -9,7 +9,7 @@
     {
       "name": "the-horses-actors",
       "label": "The Horse's Actors",
-      "path": "packs/actors/the-horses-actors",
+      "path": "packs/actors/horses-actors",
       "type": "Actor",
       "system": "dnd5e"
     }
