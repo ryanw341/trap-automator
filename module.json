@@ -12,7 +12,7 @@
       "path": "packs/actors/horses-actors.ldb",
       "type": "Actor",
       "system": "dnd5e"
-    }
+    },
     {
       "name": "the-horses-macros",
       "label": "The Horse's Macros",
