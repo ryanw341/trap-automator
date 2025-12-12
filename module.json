@@ -42,7 +42,7 @@
   ],
   "relationships": {
     "requires": [
-      { "id": "monks-active-tile-triggers", "type": "module" },
+      { "id": "monks-active-tiles", "type": "module" },
       { "id": "stealthy", "type": "module" }
     ]
   }
