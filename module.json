@@ -9,14 +9,14 @@
     {
       "name": "the-horses-actors",
       "label": "The Horse's Actors",
-      "path": "packs/horses-actors/000005.ldb",
+      "path": "packs/horses-actors",
       "type": "Actor",
       "system": "dnd5e"
     },
     {
       "name": "the-horses-macros",
       "label": "The Horse's Macros",
-      "path": "packs/horses-macros/000005.ldb",
+      "path": "packs/horses-macros",
       "type": "Macro",
       "system": "dnd5e"
     }
