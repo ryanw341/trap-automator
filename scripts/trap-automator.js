@@ -520,8 +520,38 @@ class TrapAutomator {
    */
   async saveCustomDefinitions(custom) {
     await game.settings.set('trap-automator', 'customDefs', custom);
-    // Merge into live definitions
-    this.mergeDefinitions(custom);
+    // Rebuild the live definitions from the built-in baseline plus the updated
+    // custom definitions. Rebuilding (rather than a one-way merge) ensures that
+    // removed custom traps, caches, triggers and categories disappear
+    // immediately instead of lingering until the next world reload.
+    this.rebuildDefinitions();
+  }
+
+  /**
+   * Reset the live definitions to the built-in baseline, then layer the custom
+   * definitions stored in world settings on top and re-derive default
+   * triggers. Because this rebuilds from scratch, deletions in the custom
+   * definitions are reflected without requiring a reload. Called on ready and
+   * after every save of the custom definitions.
+   */
+  rebuildDefinitions() {
+    // Start from a deep clone of the cached built-in definitions so the
+    // baseline is never mutated.
+    const base = this.builtinDefs ? foundry.utils.duplicate(this.builtinDefs) : {};
+    this.definitions = { trap: {}, cache: {}, triggers: {} };
+    this.mergeDefinitions(base);
+    let custom = {};
+    try {
+      custom = game.settings.get('trap-automator', 'customDefs') || {};
+    } catch (err) {
+      custom = {};
+    }
+    if (custom && Object.keys(custom).length) this.mergeDefinitions(custom);
+    // Only populate default triggers when at least one trap or cache exists so
+    // blank/test worlds start with an empty trigger list.
+    const hasDefs = Object.keys(this.definitions.trap || {}).length > 0
+      || Object.keys(this.definitions.cache || {}).length > 0;
+    if (hasDefs) this.initializeDefaultTriggers();
   }
 
   /**
@@ -541,7 +571,7 @@ class TrapAutomator {
               ui.notifications.warn('Category ID cannot be empty.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.categories) custom.categories = {};
             if (custom.categories[cat]) {
               ui.notifications.warn('Category already exists in custom definitions.');
@@ -613,7 +643,7 @@ class TrapAutomator {
               ui.notifications.warn('Trigger text cannot be empty.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.triggers) custom.triggers = {};
             if (!custom.triggers[cat]) custom.triggers[cat] = [];
             custom.triggers[cat].push(trig);
@@ -705,7 +735,7 @@ class TrapAutomator {
               ui.notifications.warn('At least one hint set must be filled in.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.cache) custom.cache = {};
             const key = this.slugify(name);
             custom.cache[key] = {
@@ -877,7 +907,7 @@ class TrapAutomator {
               ui.notifications.warn('At least one complete hint set must be provided.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.trap) custom.trap = {};
             const key = this.slugify(name);
             custom.trap[key] = {
@@ -985,7 +1015,7 @@ class TrapAutomator {
               return;
             }
             // Prevent duplicates by checking existing custom categories
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.categories) custom.categories = {};
             if (custom.categories[sub]) {
               ui.notifications.warn('Subcategory already exists in custom definitions.');
@@ -1105,7 +1135,7 @@ class TrapAutomator {
               ui.notifications.warn('You must enter a new category name.');
               return;
             }
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.categories) custom.categories = {};
             // Rename custom category or create override
             delete custom.categories[oldCat];
@@ -1119,7 +1149,7 @@ class TrapAutomator {
           callback: async html => {
             const catToDelete = html.find('#ta-edit-cat-sel').val();
             // Only allow deletion of custom categories
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.categories || !custom.categories[catToDelete]) {
               ui.notifications.warn('Only custom categories may be deleted.');
               return;
@@ -1256,7 +1286,7 @@ class TrapAutomator {
               return;
             }
             // Build custom object and replace the trigger
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.triggers) custom.triggers = {};
             // Remove old trigger if exists in custom for the category
             if (!custom.triggers[catVal]) custom.triggers[catVal] = [];
@@ -1297,7 +1327,7 @@ class TrapAutomator {
                 yes: {
                   label: 'Delete',
                   callback: async () => {
-                    const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+                    const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
                     if (!custom.triggers) custom.triggers = {};
                     // Build new list excluding the old trigger
                     const newList = baseList.filter(t => t !== oldTrig);
@@ -1534,7 +1564,7 @@ class TrapAutomator {
                 '+10': $el.find(`[name="hint-${i}-10"]`).val().trim()
               });
             });
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.cache) custom.cache = {};
             custom.cache[key] = {
               name: newName || key,
@@ -1567,7 +1597,7 @@ class TrapAutomator {
                 yes: {
                   label: 'Delete',
                   callback: async () => {
-                    const custom = duplicate(customDefs);
+                    const custom = foundry.utils.duplicate(customDefs);
                     delete custom.cache[key];
                     await this.saveCustomDefinitions(custom);
                     ui.notifications.info(`Cache "${def.name || key}" deleted.`);
@@ -1782,7 +1812,7 @@ class TrapAutomator {
                 '+10': $el.find(`[name="hint-${i}-10"]`).val().trim()
               });
             });
-            const custom = duplicate(game.settings.get('trap-automator', 'customDefs') || {});
+            const custom = foundry.utils.duplicate(game.settings.get('trap-automator', 'customDefs') || {});
             if (!custom.trap) custom.trap = {};
             custom.trap[key] = {
               name: newName || key,
@@ -1821,7 +1851,7 @@ class TrapAutomator {
                 yes: {
                   label: 'Delete',
                   callback: async () => {
-                    const custom = duplicate(customDefs);
+                    const custom = foundry.utils.duplicate(customDefs);
                     delete custom.trap[key];
                     await this.saveCustomDefinitions(custom);
                     ui.notifications.info(`Trap "${def.name || key}" deleted.`);
@@ -2286,48 +2316,51 @@ class TrapAutomator {
   /**
    * Callback invoked when the GM finishes drawing a tile. Builds the trap
    * data object, stores it as a flag on the tile and spawns hint tokens
-   * around the tile.
+   * around the tile. Traps additionally attach a Monk's Active Tile trigger
+   * that runs the resolution macro when a player enters the tile. Caches do
+   * not roll or trigger a macro at all — their data is stored on the tile as
+   * metadata only and the workflow simply spawns the four hint tokens.
    * @param {TileDocument} tileDoc The newly created tile document
    */
   async onTileCreated(tileDoc) {
     const trapData = this.buildTrapData();
-    // Prepare the macro trigger for Monk's Active Tile Triggers. Use the hardcoded
-    // macro UUID provided by the GM via settings. If no custom macro has
-    // been selected, fall back to the default value. Wrap the JSON argument
-    // in quotes to prevent splitting on spaces. Escape double quotes inside
-    // the JSON.
-    const macroUuid = game.settings.get('trap-automator', 'macroId') || 'Macro.z9RXNw9fEKBIkxHW';
-    const rawJson = JSON.stringify(trapData);
-    const escaped = rawJson.replace(/"/g, '\\"');
-    const argString = `"${escaped}"`;
-    const action = {
-      id: foundry.utils.randomID(),
-      action: 'runmacro',
-      data: {
-        macroid: macroUuid,
-        args: argString,
-        runasgm: 'player'
-      }
-    };
-    // Build hint strings for each difficulty based on location
+    // Build hint strings for each difficulty based on location.
     const hints = this.getHints(trapData);
-    // Update tile flags to include trap data and macro trigger. Use update() so
-    // both flags are written in a single call.
-    try {
-      await tileDoc.update({
-        flags: {
-          'trap-automator': { trapData },
-          'monks-active-tiles': {
-            trigger: 'enter',
-            active: true,
-            restrictedTokens: 'players',
-            actions: [action]
-          }
+    // Assemble the tile flags. Both traps and caches store their data under
+    // the trap-automator flag for later inspection. Only traps also attach a
+    // Monk's Active Tile trigger; caches never run a macro.
+    const flags = { 'trap-automator': { trapData } };
+    if (trapData.type === 'trap') {
+      // Prepare the macro trigger for Monk's Active Tile Triggers. Use the
+      // macro UUID chosen by the GM via settings, falling back to the default
+      // value. Wrap the JSON argument in quotes to prevent splitting on
+      // spaces and escape any double quotes inside the JSON.
+      const macroUuid = game.settings.get('trap-automator', 'macroId') || 'Macro.z9RXNw9fEKBIkxHW';
+      const rawJson = JSON.stringify(trapData);
+      const escaped = rawJson.replace(/"/g, '\\"');
+      const argString = `"${escaped}"`;
+      const action = {
+        id: foundry.utils.randomID(),
+        action: 'runmacro',
+        data: {
+          macroid: macroUuid,
+          args: argString,
+          runasgm: 'player'
         }
-      });
+      };
+      flags['monks-active-tiles'] = {
+        trigger: 'enter',
+        active: true,
+        restrictedTokens: 'players',
+        actions: [action]
+      };
+    }
+    // Write the tile flags in a single update.
+    try {
+      await tileDoc.update({ flags });
     } catch (err) {
       console.error('Trap Automator: Failed to update tile flags', err);
-      ui.notifications.error('Trap Automator: Failed to create macro trigger. See console for details.');
+      ui.notifications.error('Trap Automator: Failed to update the tile. See console for details.');
     }
     // Spawn linked hint tokens around the tile.
     try {
@@ -2336,7 +2369,11 @@ class TrapAutomator {
       console.error('Trap Automator: Failed to spawn hint tokens', err);
       ui.notifications.error('Trap Automator: Failed to create hint tokens. See console for details.');
     }
-    ui.notifications.info('Trap or cache created. Hint tokens have been placed and the tile will now trigger the Trap Trigger macro when entered.');
+    if (trapData.type === 'trap') {
+      ui.notifications.info('Trap created. Hint tokens have been placed and the tile will trigger the Trap Trigger macro when entered.');
+    } else {
+      ui.notifications.info('Cache created. Hint tokens have been placed around the tile.');
+    }
   }
 
   /**
@@ -2522,13 +2559,16 @@ Hooks.once('init', () => {
 // world settings. Log how many traps and caches were loaded for debug.
 Hooks.once('ready', async () => {
   console.log('Trap Automator: ready hook fired');
+  // Load and cache the built‑in definitions as an immutable baseline. The live
+  // definitions are then (re)built from this baseline plus the custom
+  // definitions stored in world settings via rebuildDefinitions().
   try {
     const resp = await fetch('modules/trap-automator/definitions/builtin-defs.json');
     if (resp.ok) {
       const data = await resp.json();
-      game.trapAutomator.mergeDefinitions(data);
-      const trapCount = Object.keys(game.trapAutomator.definitions.trap || {}).length;
-      const cacheCount = Object.keys(game.trapAutomator.definitions.cache || {}).length;
+      game.trapAutomator.builtinDefs = data;
+      const trapCount = Object.keys(data.trap || {}).length;
+      const cacheCount = Object.keys(data.cache || {}).length;
       console.log(`Trap Automator: loaded ${trapCount} traps and ${cacheCount} caches from definitions`);
     } else {
       console.error('Trap Automator: failed to load builtin definitions:', resp.statusText);
@@ -2536,34 +2576,12 @@ Hooks.once('ready', async () => {
   } catch (err) {
     console.error('Trap Automator: error loading definitions', err);
   }
-  // Load any custom definitions stored in settings.
+  // Build the live definitions from the baseline plus custom definitions and
+  // initialise default triggers.
   try {
-    const custom = game.settings.get('trap-automator', 'customDefs');
-    if (custom && Object.keys(custom).length) {
-      game.trapAutomator.mergeDefinitions(custom);
-      console.log('Trap Automator: loaded custom definitions');
-    }
+    game.trapAutomator.rebuildDefinitions();
+    console.log('Trap Automator: definitions ready');
   } catch (err) {
-    // Ignore missing settings for first‑time install
-  }
-  // Initialise default trigger lists for each primary category. These lists
-  // provide sensible phrases such as "step on a pressure plate" for the
-  // generic category and similar thematic triggers for sci‑fi, magical,
-  // natural and grimdark categories. If triggers are already defined in
-  // custom definitions they will not be overwritten.
-  // Initialise default triggers only if builtin definitions define traps or caches.
-  // For blank/test versions with no definitions, skip populating triggers so the module
-  // starts with an empty trigger list and the GM can create custom triggers. Check
-  // whether there is at least one trap or cache key before invoking the defaults.
-  try {
-    const hasDefs = (Object.keys(game.trapAutomator.definitions.trap || {}).length > 0) || (Object.keys(game.trapAutomator.definitions.cache || {}).length > 0);
-    if (hasDefs) {
-      game.trapAutomator.initializeDefaultTriggers();
-      console.log('Trap Automator: default triggers initialised');
-    } else {
-      console.log('Trap Automator: no builtin definitions found; skipping default triggers');
-    }
-  } catch (err) {
-    console.error('Trap Automator: error initialising default triggers', err);
+    console.error('Trap Automator: error building definitions', err);
   }
 });
