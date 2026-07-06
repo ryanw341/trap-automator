@@ -5409,6 +5409,72 @@
           }
         ]
       }
+    },
+    "hidden path": {
+      "name": "Hidden Path",
+      "description": {
+        "flavor": "A concealed section of the {location} swings aside, revealing an accessway to a hidden path.",
+        "found": "You slip through into the passage beyond.",
+        "empty": "The way beyond has caved in and leads nowhere."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A thin ray of light catches your eye from this spot.",
+            "+4": "The acoustics of this spot seem subtly different.",
+            "+6": "Hinges are worked into this part of the structure.",
+            "+10": "You make out the outline of an accessway to a hidden path."
+          },
+          {
+            "+2": "This spot is oddly crowded with pipes and machinery.",
+            "+4": "A warm draft breathes from somewhere in this spot.",
+            "+6": "A valve here feeds directly into the surface, out of place among the rest.",
+            "+10": "A concealed accessway to a hidden path opens up to you."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A thin ray of light catches your eye from this spot.",
+            "+4": "The acoustics of this spot seem subtly different.",
+            "+6": "Hinges are worked into this part of the structure.",
+            "+10": "You make out the outline of an accessway to a hidden path."
+          },
+          {
+            "+2": "This spot is oddly crowded with pipes and machinery.",
+            "+4": "A warm draft breathes from somewhere in this spot.",
+            "+6": "A valve here feeds directly into the surface, out of place among the rest.",
+            "+10": "A concealed accessway to a hidden path opens up to you."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A thin ray of light catches your eye from this spot.",
+            "+4": "The acoustics of this spot seem subtly different.",
+            "+6": "Hinges are worked into this part of the structure.",
+            "+10": "You make out the outline of an accessway to a hidden path."
+          },
+          {
+            "+2": "This spot is oddly crowded with pipes and machinery.",
+            "+4": "A warm draft breathes from somewhere in this spot.",
+            "+6": "A valve here feeds directly into the surface, out of place among the rest.",
+            "+10": "A concealed accessway to a hidden path opens up to you."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A thin ray of light catches your eye from this spot.",
+            "+4": "The acoustics of this spot seem subtly different.",
+            "+6": "Hinges are worked into this part of the structure.",
+            "+10": "You make out the outline of an accessway to a hidden path."
+          },
+          {
+            "+2": "This spot is oddly crowded with pipes and machinery.",
+            "+4": "A warm draft breathes from somewhere in this spot.",
+            "+6": "A valve here feeds directly into the surface, out of place among the rest.",
+            "+10": "A concealed accessway to a hidden path opens up to you."
+          }
+        ]
+      }
     }
   }
 }
