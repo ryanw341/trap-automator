@@ -89,6 +89,79 @@ class TrapAutomator {
   }
 
   /**
+   * Build a dialog from the legacy Dialog specification shape and return the
+   * application instance without rendering it, so callers keep using
+   * `.render(true)`.
+   *
+   * Foundry v13 deprecated the ApplicationV1 `Dialog` class (removal planned
+   * for a later release), so prefer `DialogV2` where available and fall back
+   * to the legacy class otherwise. ApplicationV2#render() interprets a boolean
+   * argument as the `force` option, so `.render(true)` works on both.
+   *
+   * @param {Object} spec Legacy spec: { title, content, buttons, default, onClose }
+   * @returns {Application} The dialog instance, not yet rendered
+   */
+  static makeDialog(spec) {
+    const { title, content, buttons = {}, default: defaultButton, onClose } = spec;
+    const attachClose = dlg => TrapAutomator.onDialogClose(dlg, onClose);
+    const DialogV2 = foundry?.applications?.api?.DialogV2;
+    if (!DialogV2) {
+      // Pre-v13 cores: fall back to the ApplicationV1 Dialog class.
+      const LegacyDialog = globalThis.Dialog;
+      return attachClose(new LegacyDialog({ title, content, buttons, default: defaultButton }));
+    }
+    // DialogV2 takes an array of buttons rather than a keyed object, and calls
+    // back with (event, button, dialog). Legacy callbacks expect a jQuery
+    // wrapper around the dialog body, so provide one.
+    const btns = Object.entries(buttons).map(([action, cfg]) => ({
+      action,
+      label: cfg.label ?? action,
+      default: action === defaultButton,
+      callback: (event, button, dialog) => {
+        if (typeof cfg.callback !== 'function') return;
+        const root = dialog?.element ?? button?.form ?? null;
+        return cfg.callback(root ? $(root) : $());
+      }
+    }));
+    return attachClose(new DialogV2({ window: { title }, content, buttons: btns }));
+  }
+
+  /**
+   * Run a cleanup callback when the given dialog closes. DialogV2 does not
+   * emit the legacy "closeDialog" hook, so wrap close() instead. Used to tear
+   * down delegated jQuery handlers attached after render.
+   * @param {Application} dlg The dialog instance
+   * @param {Function} [fn] Cleanup callback
+   * @returns {Application} The same dialog instance
+   */
+  static onDialogClose(dlg, fn) {
+    if (!dlg || typeof fn !== 'function') return dlg;
+    const close = dlg.close.bind(dlg);
+    dlg.close = async (...args) => {
+      try {
+        fn();
+      } catch (err) {
+        console.error('Trap Automator: dialog close handler failed', err);
+      }
+      return close(...args);
+    };
+    return dlg;
+  }
+
+  /**
+   * Format a category slug for display, title-casing each word so values such
+   * as "space elves" and "sci-fi" render as "Space Elves" and "Sci-Fi".
+   * @param {string} str Slug to format
+   * @returns {string} Display label
+   */
+  static formatLabel(str) {
+    return String(str || '')
+      .split(/([\s-])/)
+      .map(part => (/^[\s-]$/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1)))
+      .join('');
+  }
+
+  /**
    * Merge custom definitions into the existing definitions. Performs a deep
    * merge so that individual traps or caches may be overridden or added
    * without replacing the entire definitions object.
@@ -219,7 +292,7 @@ class TrapAutomator {
    */
   openInitialDialog() {
     this.currentData = {};
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Trap Automator',
       content: '<p>What would you like to create?</p>',
       buttons: {
@@ -270,7 +343,7 @@ class TrapAutomator {
    */
   openAddDefinitionDialog() {
     const content = '<p>What kind of definition would you like to add?</p>';
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Add Definition',
       content,
       buttons: {
@@ -309,7 +382,7 @@ class TrapAutomator {
    */
   openEditDefinitionDialog() {
     const content = '<p>What kind of definition would you like to edit?</p>';
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Edit Definition',
       content,
       buttons: {
@@ -389,8 +462,11 @@ class TrapAutomator {
       }
     } catch (err) {}
     // Built‑in mapping
+    // Current subcategory names first; the legacy names are retained so custom
+    // definitions created before the rename still resolve to grimdark.
     const grimdarkSubs = [
-      'imperial', 'ork', 'eldar', 'necron', 'tau', 'chaos', 'daemon', 'sisters', 'adeptus', 'tyranid', 'harlequin', 'dark-eldar', 'dark eldar'
+      'imperial', 'space elves', 'cyborgs', 'greenskins', 'biohorrors',
+      'ork', 'eldar', 'necron', 'tau', 'chaos', 'daemon', 'sisters', 'adeptus', 'tyranid', 'harlequin', 'dark-eldar', 'dark eldar'
     ];
     if (grimdarkSubs.includes(name)) return { primary: 'grimdark', sub: name };
     if (/sci[- ]?fi/.test(name)) return { primary: 'sci-fi', sub: null };
@@ -559,7 +635,7 @@ class TrapAutomator {
    */
   openAddCategoryDialog() {
     const content = `<form><div class="form-group"><label for="ta-add-cat-id">New category ID:</label><input type="text" id="ta-add-cat-id" name="ta-add-cat-id" /></div></form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Add Category',
       content,
       buttons: {
@@ -616,7 +692,7 @@ class TrapAutomator {
       primaryCats = ['generic', 'sci-fi', 'magical', 'natural', 'grimdark'];
     }
     const options = primaryCats
-      .map(c => `<option value="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}</option>`)
+      .map(c => `<option value="${c}">${TrapAutomator.formatLabel(c)}</option>`)
       .join('');
     const content = `<form>
       <div class="form-group">
@@ -630,7 +706,7 @@ class TrapAutomator {
         <input type="text" id="ta-add-trig-text" name="ta-add-trig-text" />
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Add Trigger',
       content,
       buttons: {
@@ -681,7 +757,7 @@ class TrapAutomator {
     if (!primaryCats.length) {
       primaryCats = ['generic', 'sci-fi', 'magical', 'natural', 'grimdark'];
     }
-    const options = primaryCats.map(c => `<option value="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('');
+    const options = primaryCats.map(c => `<option value="${c}">${TrapAutomator.formatLabel(c)}</option>`).join('');
     const content = `<form id="ta-add-cache-form">
       <div class="form-group">
         <label for="ta-add-cache-cat">Category:</label>
@@ -704,7 +780,7 @@ class TrapAutomator {
       </div>
       <button type="button" id="ta-add-cache-addset">Add Another Set</button>
     </form>`;
-    const dlg = new Dialog({
+    const dlg = TrapAutomator.makeDialog({
       title: 'Add Cache',
       content,
       buttons: {
@@ -811,14 +887,14 @@ class TrapAutomator {
     if (!primaryCats.length) {
       primaryCats = ['generic', 'sci-fi', 'magical', 'natural', 'grimdark'];
     }
-    const options = primaryCats.map(c => `<option value="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('');
+    const options = primaryCats.map(c => `<option value="${c}">${TrapAutomator.formatLabel(c)}</option>`).join('');
     // Precompute subcategories for each primary category using helper
     const subsByPrimary = {};
     for (const pc of primaryCats) {
       subsByPrimary[pc] = this.getSubcategories(pc);
     }
     const initialSubs = subsByPrimary[primaryCats[0]] || [];
-    const subOptions = initialSubs.map(s => `<option value="${s}">${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('');
+    const subOptions = initialSubs.map(s => `<option value="${s}">${TrapAutomator.formatLabel(s)}</option>`).join('');
     const saveTypes = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
     const saveOpts = saveTypes.map(s => `<option value="${s}">${s.toUpperCase()}</option>`).join('');
     const content = `<form id="ta-add-trap-form">
@@ -863,7 +939,7 @@ class TrapAutomator {
       </div>
       <button type="button" id="ta-add-trap-addset">Add Another Set</button>
     </form>`;
-    const dlg = new Dialog({
+    const dlg = TrapAutomator.makeDialog({
       title: 'Add Trap',
       content,
       buttons: {
@@ -955,7 +1031,7 @@ class TrapAutomator {
         for (const s of subs) {
           const opt = document.createElement('option');
           opt.value = s;
-          opt.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+          opt.textContent = TrapAutomator.formatLabel(s);
           select.append(opt);
         }
         wrap.show();
@@ -989,7 +1065,7 @@ class TrapAutomator {
     if (!primaryCats.length) {
       primaryCats = ['generic', 'sci-fi', 'magical', 'natural', 'grimdark'];
     }
-    const options = primaryCats.map(c => `<option value="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('');
+    const options = primaryCats.map(c => `<option value="${c}">${TrapAutomator.formatLabel(c)}</option>`).join('');
     const content = `<form>
       <div class="form-group">
         <label for="ta-add-subcat-prim">Primary category:</label>
@@ -1000,7 +1076,7 @@ class TrapAutomator {
         <input type="text" id="ta-add-subcat-name" />
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Add Subcategory',
       content,
       buttons: {
@@ -1070,7 +1146,7 @@ class TrapAutomator {
         </select>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Select Macro',
       content,
       buttons: {
@@ -1122,7 +1198,7 @@ class TrapAutomator {
         <input type="text" id="ta-edit-cat-new" name="ta-edit-cat-new" />
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Edit Category',
       content,
       buttons: {
@@ -1155,7 +1231,7 @@ class TrapAutomator {
               return;
             }
             // Confirm deletion
-            new Dialog({
+            TrapAutomator.makeDialog({
               title: 'Confirm Deletion',
               content: `<p>Are you sure you want to delete the category "${catToDelete}" and all associated triggers, traps and caches?</p>`,
               buttons: {
@@ -1271,7 +1347,7 @@ class TrapAutomator {
         <input type="text" id="ta-edit-trig-new" name="ta-edit-trig-new" />
       </div>
     </form>`;
-    const dlg = new Dialog({
+    const dlg = TrapAutomator.makeDialog({
       title: 'Edit Trigger',
       content,
       buttons: {
@@ -1320,7 +1396,7 @@ class TrapAutomator {
               return;
             }
             // Show confirm dialog
-            new Dialog({
+            TrapAutomator.makeDialog({
               title: 'Confirm Deletion',
               content: `<p>Are you sure you want to delete the trigger "${oldTrig}" from category ${catVal}?</p>`,
               buttons: {
@@ -1357,7 +1433,7 @@ class TrapAutomator {
         select.append(new Option(t, t));
       }
     });
-    Hooks.once('closeDialog', () => {
+    TrapAutomator.onDialogClose(dlg, () => {
       $(document).off('change.taEditTrig');
     });
   }
@@ -1454,7 +1530,7 @@ class TrapAutomator {
         <select id="ta-edit-cache-key-sel">${cacheOptions}</select>
       </div>
     </form>`;
-    const dlg = new Dialog({
+    const dlg = TrapAutomator.makeDialog({
       title: 'Select Cache to Edit',
       content: outerContent,
       buttons: {
@@ -1480,7 +1556,7 @@ class TrapAutomator {
         select.append(new Option(name, key));
       }
     });
-    Hooks.once('closeDialog', () => {
+    TrapAutomator.onDialogClose(dlg, () => {
       $(document).off('change.taEditCacheSel');
     });
   }
@@ -1543,7 +1619,7 @@ class TrapAutomator {
       <div id="ta-edit-cache-sets2">${setsHtml}</div>
       <button type="button" id="ta-edit-cache-addset2">Add Another Set</button>
     </form>`;
-    const dlg = new Dialog({
+    const dlg = TrapAutomator.makeDialog({
       title: `Edit Cache: ${def.name || key}`,
       content,
       buttons: {
@@ -1590,7 +1666,7 @@ class TrapAutomator {
               ui.notifications.warn('Only custom caches may be deleted.');
               return;
             }
-            new Dialog({
+            TrapAutomator.makeDialog({
               title: 'Confirm Deletion',
               content: `<p>Are you sure you want to delete the cache "${def.name || key}"?</p>`,
               buttons: {
@@ -1620,7 +1696,7 @@ class TrapAutomator {
       const idx = container.children('.ta-hint-set').length;
       container.append(this._renderHintSet(idx));
     });
-    Hooks.once('closeDialog', () => {
+    TrapAutomator.onDialogClose(dlg, () => {
       $(document).off('click.taEditCache');
     });
   }
@@ -1654,7 +1730,7 @@ class TrapAutomator {
         </select>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Select Trap Category',
       content,
       buttons: {
@@ -1694,7 +1770,7 @@ class TrapAutomator {
         </select>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: `Select Trap in ${cat}`,
       content,
       buttons: {
@@ -1789,7 +1865,7 @@ class TrapAutomator {
       <div id="ta-edit-trap-sets2">${setsHtml}</div>
       <button type="button" id="ta-edit-trap-addset2">Add Another Set</button>
     </form>`;
-    const dlg = new Dialog({
+    const dlg = TrapAutomator.makeDialog({
       title: `Edit Trap: ${def.name || key}`,
       content,
       buttons: {
@@ -1844,7 +1920,7 @@ class TrapAutomator {
               ui.notifications.warn('Only custom traps may be deleted.');
               return;
             }
-            new Dialog({
+            TrapAutomator.makeDialog({
               title: 'Confirm Deletion',
               content: `<p>Are you sure you want to delete the trap "${def.name || key}"?</p>`,
               buttons: {
@@ -1874,7 +1950,7 @@ class TrapAutomator {
       const idx = container.children('.ta-hint-set').length;
       container.append(this._renderHintSet(idx));
     });
-    Hooks.once('closeDialog', () => {
+    TrapAutomator.onDialogClose(dlg, () => {
       $(document).off('click.taEditTrap');
     });
   }
@@ -1916,7 +1992,7 @@ class TrapAutomator {
         return;
       }
       const options = availableCats
-        .map(c => `<option value="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}</option>`) 
+        .map(c => `<option value="${c}">${TrapAutomator.formatLabel(c)}</option>`) 
         .join('');
       const content = `<form>
         <div class="form-group">
@@ -1924,7 +2000,7 @@ class TrapAutomator {
           <select id="ta-trap-cat" name="ta-trap-cat">${options}</select>
         </div>
       </form>`;
-      new Dialog({
+      TrapAutomator.makeDialog({
         title: 'Select Trap Category',
         content,
         buttons: {
@@ -1952,16 +2028,16 @@ class TrapAutomator {
         const subKeys = Object.keys(subMap).filter(k => k !== '_' && subMap[k].length);
         if (subKeys.length > 0) {
           const options = subKeys
-            .map(s => `<option value="${s}">${s.charAt(0).toUpperCase() + s.slice(1)}</option>`)
+            .map(s => `<option value="${s}">${TrapAutomator.formatLabel(s)}</option>`)
             .join('');
           const content = `<form>
             <div class="form-group">
-              <label for="ta-trap-subcat">Select ${primaryCat.charAt(0).toUpperCase() + primaryCat.slice(1)} sub-category:</label>
+              <label for="ta-trap-subcat">Select ${TrapAutomator.formatLabel(primaryCat)} sub-category:</label>
               <select id="ta-trap-subcat" name="ta-trap-subcat">${options}</select>
             </div>
           </form>`;
-          new Dialog({
-            title: `Select ${primaryCat.charAt(0).toUpperCase() + primaryCat.slice(1)} Sub-category`,
+          TrapAutomator.makeDialog({
+            title: `Select ${TrapAutomator.formatLabel(primaryCat)} Sub-category`,
             content,
             buttons: {
               next: {
@@ -2017,7 +2093,7 @@ class TrapAutomator {
         <select id="ta-trap-type" name="ta-trap-type">${options}</select>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Select Trap Type',
       content,
       buttons: {
@@ -2058,7 +2134,7 @@ class TrapAutomator {
         <select id="ta-cache-type" name="ta-cache-type">${options}</select>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Select Cache Type',
       content,
       buttons: {
@@ -2096,7 +2172,7 @@ class TrapAutomator {
         <select id="ta-location" name="ta-location">${options}</select>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Select Location',
       content,
       buttons: {
@@ -2176,7 +2252,7 @@ class TrapAutomator {
         <select id="ta-trigger" name="ta-trigger">${options}</select>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Select Trigger',
       content,
       buttons: {
@@ -2234,7 +2310,7 @@ class TrapAutomator {
         <input id="ta-effect" name="ta-effect" type="text" />
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Trap Details',
       content,
       buttons: {
@@ -2273,7 +2349,7 @@ class TrapAutomator {
         <textarea id="ta-cache-desc" name="ta-cache-desc" rows="3" style="width:100%" placeholder="${placeholder}"></textarea>
       </div>
     </form>`;
-    new Dialog({
+    TrapAutomator.makeDialog({
       title: 'Cache Details',
       content,
       buttons: {
