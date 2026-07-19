@@ -406,7 +406,7 @@
           }
         ]
       },
-      "category": "eldar"
+      "category": "space elves"
     },
     "shock cables": {
       "name": "Shock Cables",
@@ -1154,7 +1154,7 @@
           }
         ]
       },
-      "category": "necron"
+      "category": "cyborgs"
     },
     "radiation leak": {
       "name": "Radiation Leak",
@@ -1362,7 +1362,7 @@
     },
     "torment engine": {
       "name": "Torment Engine",
-      "category": "eldar",
+      "category": "space elves",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you trigger {trigger}, hidden barbed whips lash out from the {location},\ndelivering excruciating pain!",
@@ -1430,7 +1430,7 @@
     },
     "ork choppa trap": {
       "name": "Ork Choppa Trap",
-      "category": "ork",
+      "category": "greenskins",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you trigger {trigger}, a crude device swings jagged scrap blades from the\n{location}, roaring with savage glee!",
@@ -1634,7 +1634,7 @@
     },
     "scarab swarm trap": {
       "name": "Scarab Swarm Trap",
-      "category": "necron",
+      "category": "cyborgs",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you trigger {trigger}, a hidden nest bursts open and a swarm of tiny metallic\nconstructs pours from the {location}!",
@@ -1906,7 +1906,7 @@
     },
     "monofilament web": {
       "name": "Monofilament Web",
-      "category": "eldar",
+      "category": "space elves",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you trigger {trigger}, a nearly invisible filament whips out from the {location},\nready to shear through whatever it contacts!",
@@ -1974,7 +1974,7 @@
     },
     "shuriken burst": {
       "name": "Shuriken Burst",
-      "category": "eldar",
+      "category": "space elves",
       "defaultSave": "dex",
       "description": {
         "flavor": "As {trigger} completes, hidden apertures in the {location} release a storm of razor\ndiscs!",
@@ -2042,7 +2042,7 @@
     },
     "booma barrel": {
       "name": "Booma Barrel",
-      "category": "ork",
+      "category": "greenskins",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you disturb {trigger}, a disguised container in the {location} detonates with a\ntremendous blast!",
@@ -2110,7 +2110,7 @@
     },
     "choppa pendulum": {
       "name": "Choppa Pendulum",
-      "category": "ork",
+      "category": "greenskins",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you disturb {trigger}, a massive weighted blade swings down from the\n{location}, cleaving through the air!",
@@ -2178,7 +2178,7 @@
     },
     "sawblade fan": {
       "name": "Sawblade Fan",
-      "category": "ork",
+      "category": "greenskins",
       "defaultSave": "dex",
       "description": {
         "flavor": "When {trigger} is activated, a cluster of spinning blades erupts from the\n{location}, whirling like a deadly fan!",
@@ -2246,7 +2246,7 @@
     },
     "gauss emitter": {
       "name": "Gauss Emitter",
-      "category": "necron",
+      "category": "cyborgs",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you disturb {trigger}, a concealed emitter in the {location} unleashes a\ngreenish arc of energy that strips matter away!",
@@ -2314,7 +2314,7 @@
     },
     "tesseract vortex": {
       "name": "Tesseract Vortex",
-      "category": "necron",
+      "category": "cyborgs",
       "defaultSave": "wis",
       "description": {
         "flavor": "When {trigger} is disturbed, a hidden core in the {location} tears space open,\nunleashing a swirling vortex!",
@@ -2382,7 +2382,7 @@
     },
     "flayer array": {
       "name": "Flayer Array",
-      "category": "necron",
+      "category": "cyborgs",
       "defaultSave": "dex",
       "description": {
         "flavor": "As you activate {trigger}, a cluster of razor\u2011edged tendrils lashes out from\nthe {location}!",
@@ -4082,7 +4082,7 @@
     },
     "pain rack": {
       "name": "Pain Rack",
-      "category": "eldar",
+      "category": "space elves",
       "defaultSave": "con",
       "description": {
         "flavor": "You {trigger}{location} and the surface splits open, revealing a rack of cruel\nneedles that slam into you!",
@@ -4150,7 +4150,7 @@
     },
     "agony cage": {
       "name": "Agony Cage",
-      "category": "eldar",
+      "category": "space elves",
       "defaultSave": "wis",
       "description": {
         "flavor": "You {trigger}{location} and a shimmering cage of agony snaps into place, searing\nyour mind!",
@@ -4218,7 +4218,7 @@
     },
     "soul leech": {
       "name": "Soul Leech",
-      "category": "eldar",
+      "category": "space elves",
       "defaultSave": "wis",
       "description": {
         "flavor": "You {trigger}{location} and a cold, oppressive energy descends upon you, seeking\nto siphon your very soul!",
@@ -4286,7 +4286,7 @@
     },
     "suffering spikes": {
       "name": "Suffering Spikes",
-      "category": "eldar",
+      "category": "space elves",
       "defaultSave": "con",
       "description": {
         "flavor": "You {trigger}{location} and dozens of needle-like spikes erupt, seeking to pierce\nand poison!",
@@ -4348,6 +4348,489 @@
             "+4": "A grid of fine holes patterns this section.",
             "+6": "Retractable spines ride in sockets behind a seam.",
             "+10": "Serried poisoned spikes crouch in their housing, primed to erupt."
+          }
+        ]
+      }
+    },
+    "spore mine": {
+      "name": "Spore Mine",
+      "category": "biohorrors",
+      "defaultSave": "con",
+      "defaultDC": 10,
+      "description": {
+        "flavor": "As {trigger} is disturbed, a bloated spore-sac in the {location} bursts, flooding the air with caustic spores!",
+        "fail": "You breathe in a lungful of burning spores.",
+        "success": "You clamp your mouth shut and stagger clear of the cloud."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A faint sour-sweet smell of rot hangs here.",
+            "+4": "A patch of the surface is filmed with a pale, powdery bloom.",
+            "+6": "A taut, veined sac swells behind a split in the surface.",
+            "+10": "A bloated spore-sac strains against its skin, twitching at the faintest stir of air."
+          },
+          {
+            "+2": "The air here tastes thick and spore-laden.",
+            "+4": "Soft grey growth crusts a section of the surface.",
+            "+6": "Behind a membrane, a swollen bladder shifts and settles.",
+            "+10": "An overfull pod hangs ready to split, its walls stretched near to bursting."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A faint sour-sweet smell of rot hangs here.",
+            "+4": "A patch of the surface is filmed with a pale, powdery bloom.",
+            "+6": "A taut, veined sac swells behind a split in the surface.",
+            "+10": "A bloated spore-sac strains against its skin, twitching at the faintest stir of air."
+          },
+          {
+            "+2": "The air here tastes thick and spore-laden.",
+            "+4": "Soft grey growth crusts a section of the surface.",
+            "+6": "Behind a membrane, a swollen bladder shifts and settles.",
+            "+10": "An overfull pod hangs ready to split, its walls stretched near to bursting."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A faint sour-sweet smell of rot hangs here.",
+            "+4": "A patch of the surface is filmed with a pale, powdery bloom.",
+            "+6": "A taut, veined sac swells behind a split in the surface.",
+            "+10": "A bloated spore-sac strains against its skin, twitching at the faintest stir of air."
+          },
+          {
+            "+2": "The air here tastes thick and spore-laden.",
+            "+4": "Soft grey growth crusts a section of the surface.",
+            "+6": "Behind a membrane, a swollen bladder shifts and settles.",
+            "+10": "An overfull pod hangs ready to split, its walls stretched near to bursting."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A faint sour-sweet smell of rot hangs here.",
+            "+4": "A patch of the surface is filmed with a pale, powdery bloom.",
+            "+6": "A taut, veined sac swells behind a split in the surface.",
+            "+10": "A bloated spore-sac strains against its skin, twitching at the faintest stir of air."
+          },
+          {
+            "+2": "The air here tastes thick and spore-laden.",
+            "+4": "Soft grey growth crusts a section of the surface.",
+            "+6": "Behind a membrane, a swollen bladder shifts and settles.",
+            "+10": "An overfull pod hangs ready to split, its walls stretched near to bursting."
+          }
+        ]
+      }
+    },
+    "ripper swarm": {
+      "name": "Ripper Swarm",
+      "category": "biohorrors",
+      "defaultSave": "dex",
+      "defaultDC": 10,
+      "description": {
+        "flavor": "As {trigger} is tripped, the {location} splits open and a writhing mass of gnashing worm-forms pours out!",
+        "fail": "Chittering forms swarm over you, biting deep.",
+        "success": "You kick free before the swarm can fasten on."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A faint chittering seems to come from just out of sight.",
+            "+4": "The surface here is pocked with small, gnawed holes.",
+            "+6": "Behind a thin membrane, countless small shapes seethe.",
+            "+10": "A seething knot of gnashing worm-forms boils behind the membrane, ready to spill out."
+          },
+          {
+            "+2": "Something scratches and shifts beneath the surface.",
+            "+4": "Chewed edges rim a ragged opening.",
+            "+6": "A writhing mass presses against a translucent wall.",
+            "+10": "Hundreds of biting forms churn in the cavity, mandibles working hungrily."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A faint chittering seems to come from just out of sight.",
+            "+4": "The surface here is pocked with small, gnawed holes.",
+            "+6": "Behind a thin membrane, countless small shapes seethe.",
+            "+10": "A seething knot of gnashing worm-forms boils behind the membrane, ready to spill out."
+          },
+          {
+            "+2": "Something scratches and shifts beneath the surface.",
+            "+4": "Chewed edges rim a ragged opening.",
+            "+6": "A writhing mass presses against a translucent wall.",
+            "+10": "Hundreds of biting forms churn in the cavity, mandibles working hungrily."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A faint chittering seems to come from just out of sight.",
+            "+4": "The surface here is pocked with small, gnawed holes.",
+            "+6": "Behind a thin membrane, countless small shapes seethe.",
+            "+10": "A seething knot of gnashing worm-forms boils behind the membrane, ready to spill out."
+          },
+          {
+            "+2": "Something scratches and shifts beneath the surface.",
+            "+4": "Chewed edges rim a ragged opening.",
+            "+6": "A writhing mass presses against a translucent wall.",
+            "+10": "Hundreds of biting forms churn in the cavity, mandibles working hungrily."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A faint chittering seems to come from just out of sight.",
+            "+4": "The surface here is pocked with small, gnawed holes.",
+            "+6": "Behind a thin membrane, countless small shapes seethe.",
+            "+10": "A seething knot of gnashing worm-forms boils behind the membrane, ready to spill out."
+          },
+          {
+            "+2": "Something scratches and shifts beneath the surface.",
+            "+4": "Chewed edges rim a ragged opening.",
+            "+6": "A writhing mass presses against a translucent wall.",
+            "+10": "Hundreds of biting forms churn in the cavity, mandibles working hungrily."
+          }
+        ]
+      }
+    },
+    "digestion pool": {
+      "name": "Digestion Pool",
+      "category": "biohorrors",
+      "defaultSave": "dex",
+      "defaultDC": 10,
+      "description": {
+        "flavor": "You {trigger}{location} and a membrane gives way, spilling a pool of digestive bile across the ground!",
+        "fail": "The bile sears through cloth and skin alike.",
+        "success": "You leap back as the caustic slop spreads."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A sharp, sour reek of bile hangs about this spot.",
+            "+4": "The surface here is slick and faintly pitted.",
+            "+6": "A taut membrane bulges with something heavy and fluid.",
+            "+10": "A distended sac of digestive bile sloshes behind a straining membrane."
+          },
+          {
+            "+2": "The ground here is unpleasantly warm and damp.",
+            "+4": "Etched, weeping streaks mar the surface.",
+            "+6": "Fluid shifts audibly behind a thin, veined wall.",
+            "+10": "A reservoir of caustic slop presses against a membrane worn nearly through."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A sharp, sour reek of bile hangs about this spot.",
+            "+4": "The surface here is slick and faintly pitted.",
+            "+6": "A taut membrane bulges with something heavy and fluid.",
+            "+10": "A distended sac of digestive bile sloshes behind a straining membrane."
+          },
+          {
+            "+2": "The ground here is unpleasantly warm and damp.",
+            "+4": "Etched, weeping streaks mar the surface.",
+            "+6": "Fluid shifts audibly behind a thin, veined wall.",
+            "+10": "A reservoir of caustic slop presses against a membrane worn nearly through."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A sharp, sour reek of bile hangs about this spot.",
+            "+4": "The surface here is slick and faintly pitted.",
+            "+6": "A taut membrane bulges with something heavy and fluid.",
+            "+10": "A distended sac of digestive bile sloshes behind a straining membrane."
+          },
+          {
+            "+2": "The ground here is unpleasantly warm and damp.",
+            "+4": "Etched, weeping streaks mar the surface.",
+            "+6": "Fluid shifts audibly behind a thin, veined wall.",
+            "+10": "A reservoir of caustic slop presses against a membrane worn nearly through."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A sharp, sour reek of bile hangs about this spot.",
+            "+4": "The surface here is slick and faintly pitted.",
+            "+6": "A taut membrane bulges with something heavy and fluid.",
+            "+10": "A distended sac of digestive bile sloshes behind a straining membrane."
+          },
+          {
+            "+2": "The ground here is unpleasantly warm and damp.",
+            "+4": "Etched, weeping streaks mar the surface.",
+            "+6": "Fluid shifts audibly behind a thin, veined wall.",
+            "+10": "A reservoir of caustic slop presses against a membrane worn nearly through."
+          }
+        ]
+      }
+    },
+    "toxin sac": {
+      "name": "Toxin Sac",
+      "category": "biohorrors",
+      "defaultSave": "con",
+      "defaultDC": 10,
+      "description": {
+        "flavor": "When {trigger} is disturbed, a swollen gland in the {location} ruptures and sprays a stream of venom!",
+        "fail": "The venom burns where it strikes and your limbs go numb.",
+        "success": "You twist aside, catching only a spatter."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A bitter, medicinal tang pricks your nose.",
+            "+4": "A discolored swelling mars the surface here.",
+            "+6": "A veined gland pulses slowly behind a split.",
+            "+10": "A swollen venom-gland throbs against its skin, glistening at a weeping pore."
+          },
+          {
+            "+2": "Your eyes sting faintly as you linger here.",
+            "+4": "A dark, bruised patch spreads across the surface.",
+            "+6": "A fluid-filled bulb shifts behind a thin wall.",
+            "+10": "A taut gland beads with venom, its walls stretched to splitting."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A bitter, medicinal tang pricks your nose.",
+            "+4": "A discolored swelling mars the surface here.",
+            "+6": "A veined gland pulses slowly behind a split.",
+            "+10": "A swollen venom-gland throbs against its skin, glistening at a weeping pore."
+          },
+          {
+            "+2": "Your eyes sting faintly as you linger here.",
+            "+4": "A dark, bruised patch spreads across the surface.",
+            "+6": "A fluid-filled bulb shifts behind a thin wall.",
+            "+10": "A taut gland beads with venom, its walls stretched to splitting."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A bitter, medicinal tang pricks your nose.",
+            "+4": "A discolored swelling mars the surface here.",
+            "+6": "A veined gland pulses slowly behind a split.",
+            "+10": "A swollen venom-gland throbs against its skin, glistening at a weeping pore."
+          },
+          {
+            "+2": "Your eyes sting faintly as you linger here.",
+            "+4": "A dark, bruised patch spreads across the surface.",
+            "+6": "A fluid-filled bulb shifts behind a thin wall.",
+            "+10": "A taut gland beads with venom, its walls stretched to splitting."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A bitter, medicinal tang pricks your nose.",
+            "+4": "A discolored swelling mars the surface here.",
+            "+6": "A veined gland pulses slowly behind a split.",
+            "+10": "A swollen venom-gland throbs against its skin, glistening at a weeping pore."
+          },
+          {
+            "+2": "Your eyes sting faintly as you linger here.",
+            "+4": "A dark, bruised patch spreads across the surface.",
+            "+6": "A fluid-filled bulb shifts behind a thin wall.",
+            "+10": "A taut gland beads with venom, its walls stretched to splitting."
+          }
+        ]
+      }
+    },
+    "bio-tendril snare": {
+      "name": "Bio-Tendril Snare",
+      "category": "biohorrors",
+      "defaultSave": "str",
+      "defaultDC": 10,
+      "description": {
+        "flavor": "As you trigger {trigger}, living tendrils erupt from the {location} and coil around you!",
+        "fail": "The tendrils cinch tight, crushing the breath from you.",
+        "success": "You tear free of the grasping coils."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A faint wet rustle stirs somewhere close.",
+            "+4": "Sinewy strands lace across a seam in the surface.",
+            "+6": "Behind a split, coiled cords lie slack and twitching.",
+            "+10": "Thick living tendrils sit coiled and tensed, flexing at the slightest vibration."
+          },
+          {
+            "+2": "Something shifts damply beneath the surface.",
+            "+4": "Fibrous cords web across this section.",
+            "+6": "Muscular strands ripple behind a thin membrane.",
+            "+10": "A knot of grasping tendrils gathers itself, ready to whip out and seize."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A faint wet rustle stirs somewhere close.",
+            "+4": "Sinewy strands lace across a seam in the surface.",
+            "+6": "Behind a split, coiled cords lie slack and twitching.",
+            "+10": "Thick living tendrils sit coiled and tensed, flexing at the slightest vibration."
+          },
+          {
+            "+2": "Something shifts damply beneath the surface.",
+            "+4": "Fibrous cords web across this section.",
+            "+6": "Muscular strands ripple behind a thin membrane.",
+            "+10": "A knot of grasping tendrils gathers itself, ready to whip out and seize."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A faint wet rustle stirs somewhere close.",
+            "+4": "Sinewy strands lace across a seam in the surface.",
+            "+6": "Behind a split, coiled cords lie slack and twitching.",
+            "+10": "Thick living tendrils sit coiled and tensed, flexing at the slightest vibration."
+          },
+          {
+            "+2": "Something shifts damply beneath the surface.",
+            "+4": "Fibrous cords web across this section.",
+            "+6": "Muscular strands ripple behind a thin membrane.",
+            "+10": "A knot of grasping tendrils gathers itself, ready to whip out and seize."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A faint wet rustle stirs somewhere close.",
+            "+4": "Sinewy strands lace across a seam in the surface.",
+            "+6": "Behind a split, coiled cords lie slack and twitching.",
+            "+10": "Thick living tendrils sit coiled and tensed, flexing at the slightest vibration."
+          },
+          {
+            "+2": "Something shifts damply beneath the surface.",
+            "+4": "Fibrous cords web across this section.",
+            "+6": "Muscular strands ripple behind a thin membrane.",
+            "+10": "A knot of grasping tendrils gathers itself, ready to whip out and seize."
+          }
+        ]
+      }
+    },
+    "chitin spikes": {
+      "name": "Chitin Spikes",
+      "category": "biohorrors",
+      "defaultSave": "dex",
+      "defaultDC": 10,
+      "description": {
+        "flavor": "As {trigger} is tripped, barbed spurs of chitin erupt from the {location}!",
+        "fail": "Jagged chitin punches through and rakes you.",
+        "success": "You throw yourself clear of the erupting spurs."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A faint dry clicking sounds from within.",
+            "+4": "Hard, ridged plates knit across the surface here.",
+            "+6": "Behind a seam, pale barbed points sit socketed.",
+            "+10": "Ranks of barbed chitin spurs crouch in their sockets, pressure building behind them."
+          },
+          {
+            "+2": "The surface here is unnaturally hard and ridged.",
+            "+4": "Overlapping plates armor a patch of the surface.",
+            "+6": "Sharp tips shift in fleshy sheaths behind a split.",
+            "+10": "Serried bone-spurs strain against their sheaths, ready to punch outward."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A faint dry clicking sounds from within.",
+            "+4": "Hard, ridged plates knit across the surface here.",
+            "+6": "Behind a seam, pale barbed points sit socketed.",
+            "+10": "Ranks of barbed chitin spurs crouch in their sockets, pressure building behind them."
+          },
+          {
+            "+2": "The surface here is unnaturally hard and ridged.",
+            "+4": "Overlapping plates armor a patch of the surface.",
+            "+6": "Sharp tips shift in fleshy sheaths behind a split.",
+            "+10": "Serried bone-spurs strain against their sheaths, ready to punch outward."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A faint dry clicking sounds from within.",
+            "+4": "Hard, ridged plates knit across the surface here.",
+            "+6": "Behind a seam, pale barbed points sit socketed.",
+            "+10": "Ranks of barbed chitin spurs crouch in their sockets, pressure building behind them."
+          },
+          {
+            "+2": "The surface here is unnaturally hard and ridged.",
+            "+4": "Overlapping plates armor a patch of the surface.",
+            "+6": "Sharp tips shift in fleshy sheaths behind a split.",
+            "+10": "Serried bone-spurs strain against their sheaths, ready to punch outward."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A faint dry clicking sounds from within.",
+            "+4": "Hard, ridged plates knit across the surface here.",
+            "+6": "Behind a seam, pale barbed points sit socketed.",
+            "+10": "Ranks of barbed chitin spurs crouch in their sockets, pressure building behind them."
+          },
+          {
+            "+2": "The surface here is unnaturally hard and ridged.",
+            "+4": "Overlapping plates armor a patch of the surface.",
+            "+6": "Sharp tips shift in fleshy sheaths behind a split.",
+            "+10": "Serried bone-spurs strain against their sheaths, ready to punch outward."
+          }
+        ]
+      }
+    },
+    "symbiote nest": {
+      "name": "Symbiote Nest",
+      "category": "biohorrors",
+      "defaultSave": "con",
+      "defaultDC": 10,
+      "description": {
+        "flavor": "You {trigger}{location} and a fleshy cyst splits, releasing a cloud of burrowing parasites!",
+        "fail": "Tiny parasites burrow under your skin.",
+        "success": "You brush the squirming things off before they take hold."
+      },
+      "hints": {
+        "floor": [
+          {
+            "+2": "A faint musky, animal smell clings to this spot.",
+            "+4": "A soft, fleshy cyst swells against the surface.",
+            "+6": "Behind a membrane, small forms twitch in clustered cells.",
+            "+10": "A brood-cyst quivers with burrowing parasites, its wall thinned to tearing."
+          },
+          {
+            "+2": "Something about this spot makes your skin crawl.",
+            "+4": "A puckered, scabbed patch mars the surface.",
+            "+6": "Tiny shapes squirm within a translucent pouch.",
+            "+10": "A nest of parasitic grubs writhes in its sac, pressing to break free."
+          }
+        ],
+        "wall": [
+          {
+            "+2": "A faint musky, animal smell clings to this spot.",
+            "+4": "A soft, fleshy cyst swells against the surface.",
+            "+6": "Behind a membrane, small forms twitch in clustered cells.",
+            "+10": "A brood-cyst quivers with burrowing parasites, its wall thinned to tearing."
+          },
+          {
+            "+2": "Something about this spot makes your skin crawl.",
+            "+4": "A puckered, scabbed patch mars the surface.",
+            "+6": "Tiny shapes squirm within a translucent pouch.",
+            "+10": "A nest of parasitic grubs writhes in its sac, pressing to break free."
+          }
+        ],
+        "ceiling": [
+          {
+            "+2": "A faint musky, animal smell clings to this spot.",
+            "+4": "A soft, fleshy cyst swells against the surface.",
+            "+6": "Behind a membrane, small forms twitch in clustered cells.",
+            "+10": "A brood-cyst quivers with burrowing parasites, its wall thinned to tearing."
+          },
+          {
+            "+2": "Something about this spot makes your skin crawl.",
+            "+4": "A puckered, scabbed patch mars the surface.",
+            "+6": "Tiny shapes squirm within a translucent pouch.",
+            "+10": "A nest of parasitic grubs writhes in its sac, pressing to break free."
+          }
+        ],
+        "other": [
+          {
+            "+2": "A faint musky, animal smell clings to this spot.",
+            "+4": "A soft, fleshy cyst swells against the surface.",
+            "+6": "Behind a membrane, small forms twitch in clustered cells.",
+            "+10": "A brood-cyst quivers with burrowing parasites, its wall thinned to tearing."
+          },
+          {
+            "+2": "Something about this spot makes your skin crawl.",
+            "+4": "A puckered, scabbed patch mars the surface.",
+            "+6": "Tiny shapes squirm within a translucent pouch.",
+            "+10": "A nest of parasitic grubs writhes in its sac, pressing to break free."
           }
         ]
       }
